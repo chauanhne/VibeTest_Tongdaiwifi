@@ -37,7 +37,7 @@
 | log-bug | ✅ COMPLETED | 2026-06-30, BUG-001 (P1) + BUG-002 (P2), 2 bugs open |
 | execute-maintain | ⬜ NOT_STARTED | |
 | test-report | ⬜ NOT_STARTED | |
-| vibe-test | ✅ COMPLETED | 2026-06-30, VR-001, 40 TCs: 9P/1F/1Partial/24B/4NA, 16 locators |
+| vibe-test | ✅ COMPLETED | VR-001 (2026-06-30): 9P/1F/1Partial/24B/4NA · VR-002 (2026-06-30) retest: TC_02.1 ✅PASS (upgraded), TC_02.12 ❌FAIL confirmed, 5 EVC API-verified |
 | health-check | ✅ COMPLETED | 2026-06-30, QUICK mode, 2 CRITICAL / 3 WARNING / 2 INFO |
 | scan-source-code | ⬜ NOT_STARTED | |
 | implement-automation | ⬜ NOT_STARTED | Playwright |
