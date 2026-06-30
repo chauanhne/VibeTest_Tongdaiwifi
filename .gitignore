@@ -1,0 +1,23 @@
+# Playwright MCP temp files
+.playwright-mcp/
+
+# Node modules (nếu có automation sau này)
+node_modules/
+10_source-code/node_modules/
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Env / credentials
+.env
+*.env
+credentials*.json
