@@ -1,0 +1,11 @@
+node_modules/
+test-results/
+playwright-report/
+playwright-report-smoke/
+playwright-report-regression/
+playwright/.cache/
+*.log
+.env.local
+.DS_Store
+.idea/
+.vscode/settings.json

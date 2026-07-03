@@ -69,3 +69,10 @@ ecom-autovoucher/ (= /home/anhdc4/ECOM/V1.2)
 3. `/generate-tc` → review → `/review-tc`
 4. Log bug: `/log-bug`
 5. (Automation phase) `/init-source-code --archetype playwright-ts`
+
+## Source Code Analysis
+
+- **Framework:** TypeScript 5.x + Playwright 1.61.1
+- **Page classes:** 1 (BasePage — abstract base, chưa có Page class cụ thể) | Test files: 0 | Test() calls: 0
+- **Coverage:** 0/26 TC PASS đã automate (0%) — sẵn sàng bắt đầu qua `/implement-automation`
+- **Conventions:** `camelCase` locator property (type `Locator`) / `async verb<Target>()` action method / test name `TC_02.X: <title> / SC-...` (lưu ý: TC-MASTER dùng pattern `TC_02.X`, khác chuẩn `TC-<MODULE>-<NNN>` khai báo ở trên — xem `10_source-code/MEMORY.md` §19)

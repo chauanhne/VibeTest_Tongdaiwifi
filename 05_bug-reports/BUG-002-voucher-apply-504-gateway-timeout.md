@@ -8,7 +8,7 @@ priority: P2
 severity: High
 components: [voucher, checkout, api]
 affects_versions: [v1.2]
-labels: [tc-TC_02.1, run-VR-001, module-VOUCHER]
+labels: [tc-TC_02.1, run-VR-001, run-VR-002, run-VR-003, module-VOUCHER, not-reproduced-3x]
 environment: "https://staging.fpt.vn/checkout/0000J8P6DNZ4/payment"
 status: Open
 attachments: [TC02-40_PASS_modal-cache-no-refetch.png]
@@ -24,7 +24,7 @@ last_synced:
 | Severity / Priority | High / P2 |
 | Module | VOUCHER / CHECKOUT / API |
 | Status | Open |
-| Traceability | TC_02.1 → VR-001-2026-06-30 → Auto Voucher |
+| Traceability | TC_02.1 → VR-001-2026-06-30 (504 quan sát 1 lần) → VR-002/VR-003 (không tái hiện, 4 lần retest PASS) → Auto Voucher |
 | Environment | STG — staging.fpt.vn/checkout |
 | Jira Key | — |
 
@@ -61,17 +61,28 @@ Khi load màn Thanh toán (checkout), hệ thống gọi `POST /voucher/apply` �
 
 ## Reproductibility
 
-- Phát hiện 1 lần trong TC_02.40 fresh session retest (2026-06-30)
+- Phát hiện 1 lần trong TC_02.40 fresh session retest (VR-001, 2026-06-30)
 - Run đầu (VR-001 session 1) — `/voucher/apply` trả 200 OK thành công
 - Khả năng: **flaky / intermittent** ở STG environment, có thể do backend timeout hoặc upstream dependency
 
-## Root Cause (nghi vấn)
+### Retest Evidence — KHÔNG tái hiện qua 4 lần retest tiếp theo
 
-STG backend service xử lý `/voucher/apply` bị timeout (504) khi tải cao hoặc cold-start — không phải lỗi logic FE.
+| Run | Session/Order | TC_02.1 Result | `/voucher/apply` status |
+|-----|---------------|-----------------|--------------------------|
+| VR-001 (2026-06-30) | 0000J8P6DNZ4 | ⚠️ (504 quan sát tại TC_02.40, side observation) | 504 Gateway Timeout (1 lần) |
+| VR-002 (2026-06-30) | — (retest riêng TC_02.1) | ✅ PASS | 200 OK — CA4699 auto-applied đúng |
+| VR-003 (2026-07-02) session 1 | 0000JAZE7Q9S | ✅ PASS | 200 OK |
+| VR-003 (2026-07-02) session 2 | 0000JAZM3NLS | ✅ PASS | 200 OK |
+| VR-003 (2026-07-02) session 3 | 0000JAZO17PC | ✅ PASS | 200 OK |
+
+→ **0/4 lần retest tái hiện 504** kể từ lần phát hiện đầu tiên. Tỷ lệ tái hiện thấp, nhất quán với giả thuyết "flaky/intermittent infra" hơn là lỗi logic ổn định.
+
+## Root Cause (nghi vấn — chưa đổi, vẫn cần Dev xác nhận)
+
+STG backend service xử lý `/voucher/apply` bị timeout (504) khi tải cao hoặc cold-start — không phải lỗi logic FE. Retest evidence (0/4 tái hiện) củng cố giả thuyết đây là **infra-level, không phải deterministic app bug**.
 
 ## Ghi chú
 
 - Phát hiện như **side observation** trong TC_02.40 retest session, không phải TC chuyên biệt
-- TC liên quan trực tiếp: **TC_02.1** (auto-apply EVC khi load trang)
-- Cần retest thêm để xác nhận reproductibility rate
-- Nếu chỉ xảy ra ở STG → có thể là infra issue, không phải app bug
+- TC liên quan trực tiếp: **TC_02.1** (auto-apply EVC khi load trang) — đã re-test 4 lần (VR-002 + VR-003×3), toàn bộ PASS
+- **Đề xuất xử lý:** Do tỷ lệ tái hiện thấp (1/5 lần quan sát) và không deterministic, đề xuất giữ status Open nhưng hạ mức theo dõi — cân nhắc BA/Dev quyết định: (a) đóng bug với ghi chú "infra-flaky, monitor" nếu chấp nhận rủi ro thấp, hoặc (b) giữ mở và theo dõi thêm nếu 504 tái xuất hiện trong các run sau. KHÔNG tự đóng bug — cần retest chính thức qua `/execute-maintain` hoặc xác nhận từ BA/Dev trước khi đổi lifecycle status.

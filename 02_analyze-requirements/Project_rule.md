@@ -61,3 +61,13 @@ req_notation: AC
 
 ## §10 Custom Rules
 <!-- Thêm rule dự án đặc thù tại đây -->
+
+### §10.1 Automation Context (scaffolded by init-source-code on 2026-07-02)
+
+- **Stack:** Playwright TypeScript (archetype `playwright-ts`)
+- **Build tool:** npm
+- **Test framework:** Playwright Test
+- **Language:** TypeScript
+- **Source code path:** `10_source-code/`
+- **Locator strategy:** `page.getByRole()` ưu tiên (xem MEMORY.md §12 Locator Strategy Priority)
+- **Run command:** `npm test` (all) · `npm run test:smoke` · `npm run test:regression`
